@@ -37,7 +37,6 @@
             <div class="card-body" v-on:click="setSelectedCustomer(customer.name)">
                 <h5 class="card-title">{{customer.name}}</h5>
                 <p class="card-text">{{customer.location}}</p>
-                <p class="card-text">{{customer.address1}}</p>
 
                 <a class="btn btn-primary" v-on:click="goToDetailsPage(customer.id)"><span style="color:white">Click for more details</span></a>
             </div>

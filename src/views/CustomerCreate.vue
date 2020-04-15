@@ -18,13 +18,6 @@
         <img src="../assets/logo.png" width="100px" height="100px">
     </div>
     <div class="col-md-6 centeralign">
-        <form>
-            <input v-model="name" placeholder="name">
-            <input v-model="location" placeholder="location">
-            <input v-model="address" placeholder="address">
-            <button v-on:click="createCustomer(true)">submit</button>
-        </form>
-
         <p>This Page Displays a list of customers</p>
         <p>Clicking on a Card Displays the name below. This is to demonstrate passing data from parent to child component</p>
         <p>"Click for more details" Redirects to a new page which displays the customer information</p>
@@ -52,15 +45,21 @@ import axios from 'axios'
 export default {
     name: 'customers',
     mounted() {
-        this.loadCustomers();
+        axios({
+            method: "GET",
+            "url": "http://localhost:8080/customer"
+//            "url": "assets/samplejson/customerlist.json"
+        }).then(response => {
+            this.customerlist = response.data;
+        }, error => {
+            // eslint-disable-next-line
+            console.error(error);
+        });
     },
     data() {
         return {
             customerlist: [],
-            selectedCustomer: "",
-            name: "",
-            location: "",
-            address: ""
+            selectedCustomer: ""
         }
     },
     components: {
@@ -72,31 +71,7 @@ export default {
         },
         goToDetailsPage: function(id) {
             this.$router.push("/customerdetails/"+id);
-        },
-        loadCustomers: function() {
-            axios({
-                method: "GET",
-                "url": "http://localhost:8080/customer"
-            }).then(response => {
-                this.customerlist = response.data;
-            }, error => {
-                console.error(error);
-            });
-        },
-        createCustomer: function() {
-            axios.post('http://localhost:8080/customer', {
-                name: this.name,
-                location: this.location,
-                address: this.address,
-                })
-                .then(response => {
-                    this.loadCustomers();
-                    console.log("reloading");
-                }, error => {
-                    console.error(error);
-                });
         }
-
     }
 }
 
